@@ -1,0 +1,101 @@
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="@_theme" IsDarkMode="false" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout Class="app-shell">
+    <MudDrawer Open="_drawerExpanded"
+               Variant="DrawerVariant.Mini"
+               Elevation="1"
+               Class="@($"nav-drawer {(_drawerExpanded ? "expanded" : "collapsed")}")"
+               @onmouseenter="ExpandNav"
+               @onmouseleave="CollapseNav">
+        <div class="drawer-logo">
+            <MudAvatar Size="Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.DonutLarge" />
+            <div class="drawer-title">
+                <MudText Typo="Typo.subtitle2" Class="text-strong">Admin</MudText>
+                <MudText Typo="Typo.caption" Class="text-soft">Dashboard</MudText>
+            </div>
+        </div>
+        <NavMenu Expanded="_drawerExpanded" />
+    </MudDrawer>
+
+    <MudMainContent Class="main-surface">
+        <MudAppBar Elevation="0" Class="topbar" Dense="true">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Primary" Edge="Edge.Start" Class="d-md-none" />
+            <MudTextField @bind-Value="_searchText"
+                          Placeholder="Search..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Variant="Variant.Filled"
+                          Class="search-box" />
+
+            <MudSpacer />
+
+            <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center" Class="topbar-actions">
+                <MudButton Variant="Variant.Text" Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddBox" Class="hidden-sm">
+                    Add Product
+                </MudButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Language" Color="Color.Default" />
+                <MudBadge Dot="true" Color="Color.Primary" Overlap="true">
+                    <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Default" />
+                </MudBadge>
+                <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Default" />
+                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                <MudDivider Vertical="true" Class="mx-2" FlexItem="true" />
+                <MudStack Row="true" Spacing="1" AlignItems="AlignItems.Center" Class="profile-chip">
+                    <MudAvatar Image="https://i.pravatar.cc/100?img=5" Size="Size.Medium" />
+                    <div class="profile-text hidden-sm">
+                        <MudText Typo="Typo.subtitle2" Class="fw-600">Anna Adame</MudText>
+                        <MudText Typo="Typo.caption" Class="text-muted">Founder</MudText>
+                    </div>
+                </MudStack>
+            </MudStack>
+        </MudAppBar>
+
+        <MudContainer MaxWidth="MaxWidth.False" Class="page-container">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">??</span>
+</div>
+
+@code {
+    private string _searchText = string.Empty;
+    private bool _drawerExpanded;
+
+    private readonly MudTheme _theme = new()
+    {
+        PaletteLight = new PaletteLight
+        {
+            Primary = "#2c7be5",
+            Secondary = "#16a569",
+            Background = "#f6f8fb",
+            Surface = "#ffffff",
+            AppbarBackground = "rgba(255,255,255,0.96)",
+            DrawerBackground = "#1f2933",
+            AppbarText = "#0f172a",
+            GrayLight = "#e9eef5",
+            GrayLighter = "#f4f6fb",
+            Info = "#60a5fa",
+            Success = "#16a34a",
+            Warning = "#f59e0b",
+            Error = "#ef4444"
+        },
+        LayoutProperties = new LayoutProperties
+        {
+            DefaultBorderRadius = "12px"
+        }
+    };
+
+    private void ExpandNav() => _drawerExpanded = true;
+
+    private void CollapseNav() => _drawerExpanded = false;
+}

@@ -1,0 +1,47 @@
+@inherits LayoutComponentBase
+
+<MudNavMenu Class="@($"nav-rail {(Expanded ? "expanded" : "collapsed")}")">
+    <div class="nav-section brand-row">
+        <MudText Typo="Typo.h6" Class="brand-text">VELZON</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.RadioButtonUnchecked" Color="Color.Inherit" Size="Size.Medium" />
+    </div>
+
+    <div class="nav-section">
+        <MudNavLink Href="" Match="NavLinkMatch.All">
+            <MudIcon Icon="@Icons.Material.Filled.Apps" />
+            <span class="nav-label">Apps</span>
+            <MudIcon Icon="@Icons.Material.Filled.ChevronRight" Class="nav-end" />
+        </MudNavLink>
+
+        <MudNavLink Disabled="true">
+            <MudIcon Icon="@Icons.Material.Filled.ViewQuilt" />
+            <span class="nav-label">Layouts</span>
+            <MudChip T="string" Color="Color.Error" Size="Size.Small" Class="nav-badge">Hot</MudChip>
+        </MudNavLink>
+    </div>
+
+    <div class="nav-section">
+        <MudText Typo="Typo.overline" Class="nav-section-title">Pages</MudText>
+        <MudNavLink Href="login">
+            <MudIcon Icon="@Icons.Material.Filled.ManageAccounts" />
+            <span class="nav-label">Authentication</span>
+            <MudIcon Icon="@Icons.Material.Filled.ChevronRight" Class="nav-end" />
+        </MudNavLink>
+        <MudNavLink Disabled="true">
+            <MudIcon Icon="@Icons.Material.Filled.Article" />
+            <span class="nav-label">Pages</span>
+            <MudIcon Icon="@Icons.Material.Filled.ChevronRight" Class="nav-end" />
+        </MudNavLink>
+        <MudNavLink Disabled="true">
+            <MudIcon Icon="@Icons.Material.Filled.FlightLand" />
+            <span class="nav-label">Landing</span>
+            <MudIcon Icon="@Icons.Material.Filled.ChevronRight" Class="nav-end" />
+        </MudNavLink>
+    </div>
+
+    
+</MudNavMenu>
+
+@code {
+    [Parameter] public bool Expanded { get; set; }
+}

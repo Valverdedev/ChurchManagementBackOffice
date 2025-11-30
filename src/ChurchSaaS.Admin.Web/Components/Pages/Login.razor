@@ -1,0 +1,114 @@
+@page "/login"
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
+
+<PageTitle>Login</PageTitle>
+
+<div class="login-hero">
+    <div class="login-overlay"></div>
+    <div class="login-card-container">
+        <MudPaper Elevation="24" Class="login-card">
+            <div class="login-header">
+                <MudAvatar Size="Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.Lock" />
+                <div>
+                    <MudText Typo="Typo.h5" Class="fw-700">Welcome back</MudText>
+                    <MudText Typo="Typo.body2" Class="text-muted">Sign in to continue to the dashboard</MudText>
+                </div>
+            </div>
+
+            <MudForm @ref="_form"
+                     @bind-IsValid="_isValid"
+                     @bind-Errors="_errors"
+                     Model="@_model">
+                <MudTextField T="string"
+                              @bind-Value="_model.Email"
+                              Label="Email"
+                              Required="true"
+                              RequiredError="Email is required"
+                              Validation="@_emailAttribute"
+                              For="@(() => _model.Email)"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Mail"
+                              Class="mb-3" />
+
+                <MudTextField T="string"
+                              @bind-Value="_model.Password"
+                              Label="Password"
+                              InputType="InputType.Password"
+                              Required="true"
+                              RequiredError="Password is required"
+                              Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))"
+                              For="@(() => _model.Password)"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Lock"
+                              Class="mb-3" />
+
+                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-4">
+                    <MudCheckBox T="bool" @bind-Checked="_model.RememberMe" Label="Remember me" Color="Color.Primary" />
+                    <MudLink Href="#" Class="text-primary">Forgot password?</MudLink>
+                </MudStack>
+
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           Class="w-100 mb-2"
+                           Size="Size.Large"
+                           Disabled="@(!_isValid)"
+                           OnClick="@HandleSubmit">
+                    Sign In
+                </MudButton>
+
+                <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Class="w-100" StartIcon="@Icons.Material.Filled.Login">
+                    Sign in with Google
+                </MudButton>
+            </MudForm>
+
+            <MudDivider Class="my-4" />
+            <MudText Typo="Typo.body2" Align="Align.Center" Class="mb-2">
+                Don't have an account?
+                <MudLink Href="#" Class="text-primary fw-600">Create one</MudLink>
+            </MudText>
+            <MudText Typo="Typo.caption" Color="Color.Error" Class="d-block mt-2">@($"Errors: {_errors.Length}")</MudText>
+        </MudPaper>
+    </div>
+</div>
+
+@code {
+    private MudForm? _form;
+    private bool _isValid;
+    private string[] _errors = Array.Empty<string>();
+    private readonly EmailAddressAttribute _emailAttribute = new() { ErrorMessage = "Enter a valid email" };
+
+    private readonly LoginModel _model = new();
+
+    private Task HandleSubmit()
+    {
+        // Submit logic placeholder
+        return Task.CompletedTask;
+    }
+
+    private IEnumerable<string> PasswordStrength(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            yield return "Password is required";
+            yield break;
+        }
+        if (value.Length < 6)
+            yield return "Password must be at least 6 characters";
+        if (!Regex.IsMatch(value, @"[A-Z]"))
+            yield return "Include at least one uppercase letter";
+        if (!Regex.IsMatch(value, @"[a-z]"))
+            yield return "Include at least one lowercase letter";
+        if (!Regex.IsMatch(value, @"[0-9]"))
+            yield return "Include at least one digit";
+    }
+
+    private sealed class LoginModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public bool RememberMe { get; set; }
+    }
+}
