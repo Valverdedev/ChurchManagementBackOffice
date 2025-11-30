@@ -1,7 +1,68 @@
 @inherits LayoutComponentBase
 
-<div class="page">
-    <main>
-        @Body
-    </main>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">CS</div>
+            <div>
+                <div class="brand-title">ChurchSuite</div>
+                <div class="brand-subtitle">Admin Backoffice</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <NavLink href="/" Match="NavLinkMatch.All" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </NavLink>
+            <NavLink href="#" class="nav-item disabled">
+                <span class="nav-icon">🧾</span>
+                <span>Contribuições</span>
+            </NavLink>
+            <NavLink href="#" class="nav-item disabled">
+                <span class="nav-icon">🗓️</span>
+                <span>Eventos</span>
+            </NavLink>
+            <NavLink href="#" class="nav-item disabled">
+                <span class="nav-icon">🧑‍🤝‍🧑</span>
+                <span>Membros</span>
+            </NavLink>
+            <NavLink href="#" class="nav-item disabled">
+                <span class="nav-icon">🧭</span>
+                <span>Comunidades</span>
+            </NavLink>
+            <NavLink href="#" class="nav-item disabled">
+                <span class="nav-icon">⚙️</span>
+                <span>Configurações</span>
+            </NavLink>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="update-card">
+                <div class="update-title">Painel atualizado</div>
+                <div class="update-meta">Versão 1.0</div>
+                <p>Template pronto para receber integrações e métricas reais.</p>
+            </div>
+        </div>
+    </aside>
+
+    <div class="workspace">
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="page-title">Painel administrativo</div>
+                <div class="page-subtitle">Monitoramento geral das operações da igreja</div>
+            </div>
+            <div class="topbar-actions">
+                <div class="search-box">
+                    <input placeholder="Buscar em todo o painel" />
+                </div>
+                <button class="ghost-btn" aria-label="Notificações">🔔</button>
+                <div class="avatar">JD</div>
+            </div>
+        </header>
+
+        <main class="content">
+            @Body
+        </main>
+    </div>
 </div>

@@ -1,4 +1,197 @@
 @page "/"
 
-<h1>ChurchSaaS.Admin Backoffice</h1>
-<p>Blazor Server shell is ready.</p>
+<div class="dashboard">
+    <section class="headline">
+        <div>
+            <p class="eyebrow">Bem-vindo de volta</p>
+            <h1>Visão geral da sua comunidade</h1>
+            <p class="lead">Acompanhe entradas, presença e engajamento em um só lugar com indicadores atualizados.</p>
+            <div class="pill-group">
+                <span class="pill">Relatório semanal</span>
+                <span class="pill ghost">Sincronizado com comunidades</span>
+            </div>
+        </div>
+        <div class="callout">
+            <div class="callout-header">
+                <div>
+                    <div class="caption">Próximo encontro</div>
+                    <div class="callout-title">Sexta de oração</div>
+                </div>
+                <span class="status success">Confirmado</span>
+            </div>
+            <p>Equipe pronta, checklists concluídas e voluntários alinhados. Use este painel como ponto de partida.</p>
+            <div class="assignees">
+                <div class="avatar small">AC</div>
+                <div class="avatar small">ML</div>
+                <div class="avatar small">SV</div>
+                <span class="badge">+ 4</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="cards-grid">
+        @foreach (var card in StatCards)
+        {
+            <article class="stat-card">
+                <div class="stat-header">
+                    <div>
+                        <p class="caption">@card.Title</p>
+                        <h3>@card.Value</h3>
+                    </div>
+                    <span class="badge @card.BadgeClass">@card.BadgeText</span>
+                </div>
+                <p class="stat-note">@card.Note</p>
+                <div class="sparkline">
+                    <div class="sparkline-bar" style=$"width:{card.Progress}%"></div>
+                </div>
+            </article>
+        }
+    </section>
+
+    <section class="grid two-column">
+        <article class="panel">
+            <header class="panel-header">
+                <div>
+                    <p class="caption">Participação</p>
+                    <h3>Frequência semanal</h3>
+                </div>
+                <span class="badge">+8% vs última semana</span>
+            </header>
+            <div class="bar-chart">
+                @foreach (var attendance in AttendanceByDay)
+                {
+                    <div class="bar-item">
+                        <div class="bar" style=$"height:{attendance.Percentage}%;"></div>
+                        <span class="bar-label">@attendance.Day</span>
+                    </div>
+                }
+            </div>
+        </article>
+
+        <article class="panel">
+            <header class="panel-header">
+                <div>
+                    <p class="caption">Doações</p>
+                    <h3>Entradas por centro</h3>
+                </div>
+                <div class="pill ghost">Atualizado 2min atrás</div>
+            </header>
+            <ul class="progress-list">
+                @foreach (var center in GivingByCenter)
+                {
+                    <li>
+                        <div class="progress-header">
+                            <span>@center.Name</span>
+                            <span class="caption">@center.Amount</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div style=$"width:{center.Progress}%"></div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </article>
+    </section>
+
+    <section class="grid two-column">
+        <article class="panel">
+            <header class="panel-header">
+                <div>
+                    <p class="caption">Engajamento</p>
+                    <h3>Atividades recentes</h3>
+                </div>
+                <div class="pill">Hoje</div>
+            </header>
+            <ul class="activity-list">
+                @foreach (var item in Activities)
+                {
+                    <li>
+                        <div>
+                            <p class="caption">@item.Time</p>
+                            <strong>@item.Title</strong>
+                            <p class="muted">@item.Description</p>
+                        </div>
+                        <span class="badge ghost">@item.Channel</span>
+                    </li>
+                }
+            </ul>
+        </article>
+
+        <article class="panel">
+            <header class="panel-header">
+                <div>
+                    <p class="caption">Próximos passos</p>
+                    <h3>Agenda da semana</h3>
+                </div>
+                <button class="ghost-btn small">Ver tudo</button>
+            </header>
+            <ul class="agenda-list">
+                @foreach (var agenda in AgendaItems)
+                {
+                    <li>
+                        <div class="agenda-date">
+                            <div class="date-day">@agenda.Day</div>
+                            <div class="date-month">@agenda.Month</div>
+                        </div>
+                        <div class="agenda-details">
+                            <strong>@agenda.Title</strong>
+                            <p class="muted">@agenda.Location</p>
+                        </div>
+                        <span class="status @agenda.StatusClass">@agenda.Status</span>
+                    </li>
+                }
+            </ul>
+        </article>
+    </section>
+</div>
+
+@code {
+    private record StatCard(string Title, string Value, string Note, int Progress, string BadgeText, string BadgeClass);
+    private record Attendance(string Day, int Percentage);
+    private record GivingCenter(string Name, string Amount, int Progress);
+    private record Activity(string Time, string Title, string Description, string Channel);
+    private record Agenda(string Day, string Month, string Title, string Location, string Status, string StatusClass);
+
+    private List<StatCard> StatCards = new()
+    {
+        new("Novos membros", "48", "Inscrições nas últimas 4 semanas", 72, "+12%", "success"),
+        new("Presença média", "312", "Cultos e células consolidadas", 64, "+8%", "success"),
+        new("Doações totais", "R$ 128k", "Entradas do mês corrente", 58, "-3%", "warning"),
+        new("Voluntários ativos", "86", "Escalados nos próximos eventos", 80, "+5%", "success")
+    };
+
+    private List<Attendance> AttendanceByDay = new()
+    {
+        new("Seg", 52),
+        new("Ter", 48),
+        new("Qua", 64),
+        new("Qui", 58),
+        new("Sex", 72),
+        new("Sáb", 82),
+        new("Dom", 95)
+    };
+
+    private List<GivingCenter> GivingByCenter = new()
+    {
+        new("Sede Central", "R$ 54.200", 86),
+        new("Campus Norte", "R$ 32.800", 72),
+        new("Comunidade Leste", "R$ 21.500", 54),
+        new("Projeto Social", "R$ 12.600", 38)
+    };
+
+    private List<Activity> Activities = new()
+    {
+        new("09:12", "Confirmação de presença", "Família Rodrigues confirmou participação no culto de domingo.", "App"),
+        new("10:34", "Nova doação", "Oferta de R$ 1.200 registrada pelo campus Norte.", "Financeiro"),
+        new("12:20", "Novo voluntário", "Ana Lima cadastrada para recepção de visitantes.", "Pessoas"),
+        new("14:05", "Check-in aberto", "Auditório liberado para ensaio geral.", "Operações")
+    };
+
+    private List<Agenda> AgendaItems = new()
+    {
+        new("21", "MAI", "Culto das famílias", "Auditório principal", "Preparando", "warning"),
+        new("23", "MAI", "Treinamento de voluntários", "Sala multiuso 2", "Confirmado", "success"),
+        new("25", "MAI", "Ação social", "Praça central", "Em revisão", "info"),
+        new("26", "MAI", "Celebração jovens", "Campus Norte", "Confirmado", "success")
+    };
+}
